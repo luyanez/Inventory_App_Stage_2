@@ -7,6 +7,9 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,9 +19,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.android.product.data.InventoryContract.InventoryEntry;
+
+import java.io.ByteArrayOutputStream;
 
 public class InventoryActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
@@ -26,6 +32,8 @@ public class InventoryActivity extends AppCompatActivity implements
     private static final int PRODUCT_LOADER = 0;
 
     InventoryCursorAdapter mCursorAdapter;
+
+    ImageView mImage;
 
 
     @Override
@@ -45,14 +53,13 @@ public class InventoryActivity extends AppCompatActivity implements
 
         // Find the ListView which will be populated with the pet data
         ListView productListView = (ListView) findViewById(R.id.list);
-        Log.i("LuceroTag","Creating ListView object");
 
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
         View emptyView = findViewById(R.id.empty_view);
         productListView.setEmptyView(emptyView);
 
-        // Setup an Adapter to create a list item for each row of pet data in the Cursor.
-        // There is no pet data yet (until the loader finishes) so pass in null for the Cursor.
+        // Setup an Adapter to create a list item for each row of product data in the Cursor.
+        // There is no product data yet (until the loader finishes) so pass in null for the Cursor.
         mCursorAdapter = new InventoryCursorAdapter(this, null);
         productListView.setAdapter(mCursorAdapter);
 
@@ -60,7 +67,6 @@ public class InventoryActivity extends AppCompatActivity implements
         productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Log.i("LuceroTag","OnClick Item");
                 Intent intent = new Intent(InventoryActivity.this, EditorActivity.class);
                 Uri currentProductUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
                 intent.setData(currentProductUri);
@@ -70,6 +76,7 @@ public class InventoryActivity extends AppCompatActivity implements
 
         // Kick off the loader
         getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
+        mImage = (ImageView) findViewById(R.id.image_upload);
     }
 
     @Override
@@ -89,6 +96,13 @@ public class InventoryActivity extends AppCompatActivity implements
         values.put(InventoryEntry.COLUMN_QUANTITY, 5);
         values.put(InventoryEntry.COLUMN_SUPPLIER_NAME, "John Smith");
         values.put(InventoryEntry.COLUMN_PHONE_NUMBER, "9-153-030-786");
+
+        Bitmap bitmap = ((BitmapDrawable) mImage.getDrawable()).getBitmap();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100,bos);
+        byte[] img = bos.toByteArray();
+
+        values.put(InventoryEntry.COLUMN_IMAGE,img);
 
         Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
 
@@ -126,7 +140,8 @@ public class InventoryActivity extends AppCompatActivity implements
                 InventoryEntry.COLUMN_PRICE,
                 InventoryEntry.COLUMN_QUANTITY,
                 InventoryEntry.COLUMN_SUPPLIER_NAME,
-                InventoryEntry.COLUMN_PHONE_NUMBER
+                InventoryEntry.COLUMN_PHONE_NUMBER,
+                InventoryEntry.COLUMN_IMAGE
         };
 
         // This loader will execute the ContentProvider's query method on a background thread

@@ -24,6 +24,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0"
         android:orientation="horizontal">
 
         <TextView
@@ -51,6 +52,7 @@
         android:id="@+id/container_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0"
         android:orientation="horizontal">
 
         <TextView
@@ -76,6 +78,7 @@
         android:id="@+id/container_quantity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0"
         android:orientation="horizontal">
 
         <TextView
@@ -102,6 +105,7 @@
         android:id="@+id/container_supplier"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0"
         android:orientation="horizontal">
 
         <TextView
@@ -129,6 +133,7 @@
         android:id="@+id/container_phone_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0"
         android:orientation="horizontal">
 
         <TextView
@@ -149,4 +154,30 @@
 
         </RelativeLayout>
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/image_upload"
+            android:layout_width="match_parent"
+            android:layout_height="266dp"
+            android:layout_marginBottom="@dimen/activity_margin"
+            android:layout_marginEnd="@dimen/activity_margin"
+            android:layout_marginLeft="@dimen/activity_margin"
+            android:layout_marginRight="@dimen/activity_margin"
+            android:layout_marginStart="@dimen/activity_margin"
+            android:layout_marginTop="@dimen/activity_margin"
+            android:src="@drawable/ic_empty_box" />
+
+        <Button
+            android:id="@+id/button_image_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/upload_image" />
+    </RelativeLayout>
 </LinearLayout>

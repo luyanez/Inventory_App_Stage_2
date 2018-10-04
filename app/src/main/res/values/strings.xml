@@ -96,4 +96,6 @@
     <!-- Toast message in editor when current product has failed to be deleted [CHAR LIMIT=NONE] -->
     <string name="editor_delete_product_failed">Error with deleting product</string>
 
+    <string name="upload_image">Upload Image</string>
+
 </resources>

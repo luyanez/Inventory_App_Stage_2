@@ -23,6 +23,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -32,10 +35,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
+import android.graphics.Bitmap.CompressFormat;
 
 import com.example.android.product.data.InventoryContract.InventoryEntry;
+import com.squareup.picasso.Picasso;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Allows user to create a new pet or edit an existing one.
@@ -57,6 +66,13 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private boolean mProductHasChanged = false;
 
     private Uri mCurrentProductUri;
+
+    //Upload Image variable
+
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Button mButtonChooseImage;
+    private ImageView mImageView;
+
 
 
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
@@ -91,12 +107,44 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mSupplierNameEditText = (EditText) findViewById(R.id.edit_supplier_name) ;
         mPhoneNumberEditText = (EditText) findViewById(R.id.edit_phone_number);
 
+        //Upload image
+        mButtonChooseImage = (Button) findViewById(R.id.button_image_upload);
+        mImageView = (ImageView) findViewById(R.id.image_upload);
+
         mProductNameEditText.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
         mQuantityEditText.setOnTouchListener(mTouchListener);
         mSupplierNameEditText.setOnTouchListener(mTouchListener);
         mPhoneNumberEditText.setOnTouchListener(mTouchListener);
 
+        mButtonChooseImage.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                openFileChooser();
+
+            }
+        });
+
+    }
+
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Uri mImageUri;
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            mImageUri = data.getData();
+            Picasso.with(this).load(mImageUri).into(mImageView);
+        }
     }
 
     private void saveProduct(){
@@ -124,8 +172,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             ContentValues values = new ContentValues();
 
             values.put(InventoryEntry.COLUMN_PRODUCT_NAME,productNameString);
-
-            //
             values.put(InventoryEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
             values.put(InventoryEntry.COLUMN_PHONE_NUMBER, phoneNumberString);
 
@@ -141,6 +187,16 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 quantity = Integer.parseInt(quantityString);
             }
             values.put(InventoryEntry.COLUMN_QUANTITY, quantity);
+
+            //Validate ImageView
+            if (mImageView.getDrawable() == null) {
+                Bitmap bitmap = ((BitmapDrawable) mImageView.getDrawable()).getBitmap();
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100,bos);
+                byte[] img = bos.toByteArray();
+
+                values.put(InventoryEntry.COLUMN_IMAGE,img);
+            }
 
             if (mCurrentProductUri == null) {
                 Uri newUri =getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
@@ -170,6 +226,18 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         }
 
+    }
+
+    // convert from bitmap to byte array
+    public static byte[] getBytes(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(CompressFormat.JPEG, 0, stream);
+        return stream.toByteArray();
+    }
+
+    // convert from byte array to bitmap
+    public static Bitmap getImage(byte[] image) {
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
     @Override
