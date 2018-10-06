@@ -33,7 +33,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/activity_margin"
@@ -64,8 +64,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:orientation="horizontal"
-        android:layout_gravity="center">
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/margin_left"
+        android:layout_marginRight="@dimen/margin_left">
 
         <TextView
             android:id="@+id/price"
@@ -75,6 +77,12 @@
             android:textColor="#2B3D4D"
             android:textSize="16sp"
             tools:text="price" />
+
+        <Button
+            android:layout_width="70dp"
+            android:layout_height="40dp"
+            android:text="Sale"
+            style="@style/Widget.AppCompat.Button.Colored"/>
     </LinearLayout>
 
 

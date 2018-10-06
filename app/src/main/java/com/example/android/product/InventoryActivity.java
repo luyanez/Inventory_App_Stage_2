@@ -21,12 +21,16 @@ import android.widget.ListView;
 
 import com.example.android.product.data.InventoryContract.InventoryEntry;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class InventoryActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int PRODUCT_LOADER = 0;
 
     InventoryCursorAdapter mCursorAdapter;
+
+    CircleImageView circleImageView;
 
     ImageView mImage;
 
