@@ -75,13 +75,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textColor="#2B3D4D"
-            android:textSize="16sp"
+            android:textSize="@dimen/string_size"
             tools:text="price" />
 
         <Button
-            android:layout_width="70dp"
-            android:layout_height="40dp"
-            android:text="Sale"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
+            android:text="@string/sale"
             style="@style/Widget.AppCompat.Button.Colored"/>
 
     </LinearLayout>

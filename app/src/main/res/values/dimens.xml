@@ -29,5 +29,9 @@
     <dimen name="width_call_button">60dp</dimen>
 
     <dimen name="phone_width">170dp</dimen>
+
+    <dimen name="button_width">70dp</dimen>
+
+    <dimen name="button_height">40dp</dimen>
 </resources>
 
