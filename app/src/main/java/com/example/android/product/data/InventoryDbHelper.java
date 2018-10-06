@@ -12,7 +12,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper{
     public static final String LOG_TAG = InventoryDbHelper.class.getSimpleName();
 
     /** Name of the database file */
-    private static final String DATABASE_NAME = "inventory.db";
+    private static final String DATABASE_NAME = "products.db";
 
     /**
      * Database version. If you change the database schema, you must increment the database version.

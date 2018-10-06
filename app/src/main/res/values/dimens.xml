@@ -13,11 +13,21 @@
     <!-- Margin around the floating action button in CatalogActivity -->
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="fab2_margin">10dp</dimen>
-
-    <dimen name="fab2_dim">50dp</dimen>
-
     <!-- Common margin value used throughout the app -->
     <dimen name="activity_margin">16dp</dimen>
+
+    <dimen name="margin_left">16dp</dimen>
+
+    <dimen name="margin_right">16dp</dimen>
+
+    <dimen name="button_size">40dp</dimen>
+
+    <dimen name="string_size">16sp</dimen>
+
+    <dimen name="image_size">60dp</dimen>
+
+    <dimen name="width_call_button">60dp</dimen>
+
+    <dimen name="phone_width">170dp</dimen>
 </resources>
 

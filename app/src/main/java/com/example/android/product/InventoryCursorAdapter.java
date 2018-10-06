@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
         TextView quantity = (TextView) view.findViewById(R.id.quantity);
         TextView price = (TextView) view.findViewById(R.id.price);
 
-        ImageView image = (ImageView) view.findViewById(R.id.image_upload);
+        ImageView image = (ImageView) view.findViewById(R.id.product_image);
 
         int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_NAME);
         int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_QUANTITY);
@@ -41,12 +42,25 @@ public class InventoryCursorAdapter extends CursorAdapter {
         double productPrice = cursor.getDouble(priceColumnIndex);
         byte[] img = cursor.getBlob(imageColumnIndex);
 
+        if (img == null){
+            Log.v("Lucero Tag","NULL IMG");
+        } else {
+            String printImg = new String(img);
+
+            if (printImg.trim().equals("0x")) {
+                image.setImageResource(R.drawable.ic_empty_box);
+            }
+            else {
+                Bitmap bitmap = getImage(img);
+                image.setImageBitmap(bitmap);
+            }
+        }
+
         name.setText(productName);
         quantity.setText(Integer.toString(productQuantity)+" pcs");
         price.setText("$"+Double.toString(productPrice)+" PPU");
 
-        Bitmap bitmap = getImage(img);
-        image.setImageBitmap(bitmap);
+
     }
 
     // convert from byte array to bitmap

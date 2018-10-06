@@ -7,9 +7,6 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -24,8 +21,6 @@ import android.widget.ListView;
 
 import com.example.android.product.data.InventoryContract.InventoryEntry;
 
-import java.io.ByteArrayOutputStream;
-
 public class InventoryActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -34,7 +29,6 @@ public class InventoryActivity extends AppCompatActivity implements
     InventoryCursorAdapter mCursorAdapter;
 
     ImageView mImage;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +45,7 @@ public class InventoryActivity extends AppCompatActivity implements
             }
         });
 
-        // Find the ListView which will be populated with the pet data
+        // Find the ListView which will be populated with the product data
         ListView productListView = (ListView) findViewById(R.id.list);
 
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
@@ -96,20 +90,14 @@ public class InventoryActivity extends AppCompatActivity implements
         values.put(InventoryEntry.COLUMN_QUANTITY, 5);
         values.put(InventoryEntry.COLUMN_SUPPLIER_NAME, "John Smith");
         values.put(InventoryEntry.COLUMN_PHONE_NUMBER, "9-153-030-786");
-
-        Bitmap bitmap = ((BitmapDrawable) mImage.getDrawable()).getBitmap();
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100,bos);
-        byte[] img = bos.toByteArray();
-
-        values.put(InventoryEntry.COLUMN_IMAGE,img);
+        values.put(InventoryEntry.COLUMN_IMAGE,"0x");
 
         Uri newUri = getContentResolver().insert(InventoryEntry.CONTENT_URI, values);
 
     }
 
     /**
-     * Helper method to delete all pets in the database.
+     * Helper method to delete all products in the database.
      */
     private void deleteAllProducts() {
         int rowsDeleted = getContentResolver().delete(InventoryEntry.CONTENT_URI, null, null);
@@ -146,7 +134,7 @@ public class InventoryActivity extends AppCompatActivity implements
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
-                InventoryEntry.CONTENT_URI,         // Query the content URI for the current pet
+                InventoryEntry.CONTENT_URI,         // Query the content URI for the current product
                 projection,             // Columns to include in the resulting Cursor
                 null,                   // No selection clause
                 null,                   // No selection arguments
@@ -155,7 +143,7 @@ public class InventoryActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        // Update {@link PetCursorAdapter} with this new cursor containing updated pet data
+
         mCursorAdapter.swapCursor(data);
     }
 

@@ -44,8 +44,6 @@ public class InventoryProvider extends ContentProvider {
         // This cursor will hold the result of the query
         Cursor cursor;
 
-        Log.v("Lucero Tag","Create query");
-
         // Figure out if the URI matcher can match the URI to a specific code
         int match = sUriMatcher.match(uri);
         switch (match) {
@@ -83,7 +81,7 @@ public class InventoryProvider extends ContentProvider {
     }
 
     /**
-     * Insert a pet into the database with the given content values. Return the new content URI
+     * Insert a product into the database with the given content values. Return the new content URI
      * for that specific row in the database.
      */
     private Uri insertProduct(Uri uri, ContentValues values) {
@@ -102,7 +100,7 @@ public class InventoryProvider extends ContentProvider {
         // Get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
-        // Insert the new pet with the given values
+        // Insert the new product with the given values
         long id = database.insert(InventoryEntry.TABLE_NAME, null, values);
         // If the ID is -1, then the insertion failed. Log an error and return null.
         if (id == -1) {
@@ -110,7 +108,7 @@ public class InventoryProvider extends ContentProvider {
             return null;
         }
 
-        // Notify all listeners that the data has changed for the pet content URI
+        // Notify all listeners that the data has changed for the product content URI
         getContext().getContentResolver().notifyChange(uri, null);
 
         // Return the new URI with the ID (of the newly inserted row) appended at the end
@@ -125,9 +123,6 @@ public class InventoryProvider extends ContentProvider {
             case PRODUCT:
                 return updateProduct(uri, contentValues, selection, selectionArgs);
             case PROD_ID:
-                // For the PET_ID code, extract out the ID from the URI,
-                // so we know which row to update. Selection will be "_id=?" and selection
-                // arguments will be a String array containing the actual ID.
                 selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 return updateProduct(uri, contentValues, selection, selectionArgs);
@@ -146,8 +141,6 @@ public class InventoryProvider extends ContentProvider {
             }
         }
 
-        // If the {@link PetEntry#COLUMN_PET_WEIGHT} key is present,
-        // check that the weight value is valid.
         if (values.containsKey(InventoryEntry.COLUMN_PRICE)) {
             // Check that the weight is greater than or equal to 0 kg
             Integer price = values.getAsInteger(InventoryEntry.COLUMN_PRICE);

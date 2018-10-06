@@ -98,4 +98,10 @@
 
     <string name="upload_image">Upload Image</string>
 
+    <string name="adding">+</string>
+
+    <string name="substracting">-</string>
+
+    <string name="call">Call</string>
+
 </resources>
