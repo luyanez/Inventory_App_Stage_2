@@ -1,5 +1,6 @@
 package com.example.android.product;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.android.product.data.InventoryContract.InventoryEntry;
@@ -32,7 +34,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view,final Context context, Cursor cursor) {
 
         TextView name = (TextView) view.findViewById(R.id.product_name);
         final TextView quantity = (TextView) view.findViewById(R.id.quantity);
@@ -44,6 +46,8 @@ public class InventoryCursorAdapter extends CursorAdapter {
         int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_QUANTITY);
         int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRICE);
         int imageColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_IMAGE);
+
+        final int productId = cursor.getInt(cursor.getColumnIndexOrThrow(InventoryEntry._ID));
 
         String productName = cursor.getString(nameColumnIndex);
         final int productQuantity = cursor.getInt(quantityColumnIndex);
@@ -74,10 +78,9 @@ public class InventoryCursorAdapter extends CursorAdapter {
         button_decrease.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Log.v("Lucero tag","Sale Button");
+
                 String[] quant = quantity.getText().toString().split(" ");
                 int quantityInt = Integer.parseInt(quant[0]);
-                //Log.v("Lucero tag",Integer.toString(quantityInt));
                 quantityInt = substractToProduct(quantityInt);
                 quantity.setText(Integer.toString(quantityInt)+" pcs");
 
@@ -85,12 +88,22 @@ public class InventoryCursorAdapter extends CursorAdapter {
                 ContentValues values = new ContentValues();
                 values.put(InventoryEntry.COLUMN_QUANTITY, quantityInt);
 
-                //Uri newUri = getContentResolver().update(InventoryEntry.CONTENT_URI, values);
+                Uri newUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, productId);
+                int rowsUpdated = context.getContentResolver().update(
+                        newUri,
+                        values,
+                        null,
+                        null);
+
+                if (rowsUpdated == 1) {
+                    Toast.makeText(context, R.string.sold_successfully, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, R.string.sold_unsuccessfully, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
     }
-
 
 
     // convert from byte array to bitmap

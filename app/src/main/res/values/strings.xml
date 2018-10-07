@@ -106,4 +106,8 @@
 
     <string name="sale">Sale</string>
 
+    <string name="sold_successfully">Product sold successfully</string>
+
+    <string name="sold_unsuccessfully">Product NOT sold</string>
+
 </resources>
