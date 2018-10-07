@@ -106,7 +106,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             invalidateOptionsMenu();
         } else {
             setTitle(R.string.editor_activity_title_edit_product);
-
             getLoaderManager().initLoader(EXISTING_PRODUCT_LOADER, null, this);
         }
 
@@ -163,19 +162,28 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     public void addOneToProduct() {
-        quantity = Integer.parseInt(mQuantityEditText.getText().toString().trim());
-        quantity+=1;
-        mQuantityEditText.setText(Integer.toString(quantity));
+        if (mQuantityEditText.getText().toString().equals("")){
+            quantity = 1;
+            mQuantityEditText.setText(Integer.toString(quantity));
+        } else{
+            quantity = Integer.parseInt(mQuantityEditText.getText().toString().trim());
+            quantity+=1;
+            mQuantityEditText.setText(Integer.toString(quantity));
+        }
     }
 
     public void substractToProduct() {
-        quantity = Integer.parseInt(mQuantityEditText.getText().toString().trim());
-        if (quantity <= 1){
-            quantity = 0;
-        } else {
-            quantity -= 1;
+        if (mQuantityEditText.getText().toString().equals("")){
+            Toast.makeText(this, getString(R.string.valid_quantity),Toast.LENGTH_SHORT).show();
+        } else{
+            quantity = Integer.parseInt(mQuantityEditText.getText().toString().trim());
+            if (quantity <= 1){
+                quantity = 0;
+            } else {
+                quantity -= 1;
+            }
+            mQuantityEditText.setText(Integer.toString(quantity));
         }
-        mQuantityEditText.setText(Integer.toString(quantity));
     }
 
     private void callIntent() {

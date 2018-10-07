@@ -81,44 +81,38 @@ public class InventoryCursorAdapter extends CursorAdapter {
 
                 String[] quant = quantity.getText().toString().split(" ");
                 int quantityInt = Integer.parseInt(quant[0]);
-                quantityInt = substractToProduct(quantityInt);
-                quantity.setText(Integer.toString(quantityInt)+" pcs");
+                if(quantityInt > 0){
+                    quantityInt -= 1;
+                    quantity.setText(Integer.toString(quantityInt)+" pcs");
 
-                //Update quantity
-                ContentValues values = new ContentValues();
-                values.put(InventoryEntry.COLUMN_QUANTITY, quantityInt);
+                    //Update quantity
+                    ContentValues values = new ContentValues();
+                    values.put(InventoryEntry.COLUMN_QUANTITY, quantityInt);
 
-                Uri newUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, productId);
-                int rowsUpdated = context.getContentResolver().update(
-                        newUri,
-                        values,
-                        null,
-                        null);
+                    Uri newUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, productId);
+                    int rowsUpdated = context.getContentResolver().update(
+                            newUri,
+                            values,
+                            null,
+                            null);
 
-                if (rowsUpdated == 1) {
-                    Toast.makeText(context, R.string.sold_successfully, Toast.LENGTH_SHORT).show();
+                    if (rowsUpdated == 1) {
+                        Toast.makeText(context, R.string.sold_successfully, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, R.string.sold_unsuccessfully, Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(context, R.string.sold_unsuccessfully, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.not_enough_products, Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
 
     }
-
 
     // convert from byte array to bitmap
     public static Bitmap getImage(byte[] image) {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 
-
-    public int substractToProduct(int quantity) {
-        int quant = quantity;
-        if (quant <= 1){
-            quant = 0;
-        } else {
-            quant -= 1;
-        }
-        return quant;
-    }
 }

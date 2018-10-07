@@ -110,4 +110,8 @@
 
     <string name="sold_unsuccessfully">Product NOT sold</string>
 
+    <string name="valid_quantity">Add a valid quantity</string>
+
+    <string name="not_enough_products">You don\'t have enough products to sell</string>
+
 </resources>
