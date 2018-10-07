@@ -16,12 +16,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.android.product.data.InventoryContract.InventoryEntry;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class InventoryActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
@@ -29,8 +30,6 @@ public class InventoryActivity extends AppCompatActivity implements
     private static final int PRODUCT_LOADER = 0;
 
     InventoryCursorAdapter mCursorAdapter;
-
-    CircleImageView circleImageView;
 
     ImageView mImage;
 
@@ -63,8 +62,10 @@ public class InventoryActivity extends AppCompatActivity implements
 
         // Setup the item click listener
         productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
                 Intent intent = new Intent(InventoryActivity.this, EditorActivity.class);
                 Uri currentProductUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
                 intent.setData(currentProductUri);
@@ -72,9 +73,13 @@ public class InventoryActivity extends AppCompatActivity implements
             }
         });
 
+
+
         // Kick off the loader
         getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
         mImage = (ImageView) findViewById(R.id.image_upload);
+
+
     }
 
     @Override

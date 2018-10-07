@@ -79,9 +79,11 @@
             tools:text="price" />
 
         <Button
+            android:id="@+id/sale_button"
             android:layout_width="@dimen/button_width"
             android:layout_height="@dimen/button_height"
             android:text="@string/sale"
+            android:focusable="false"
             style="@style/Widget.AppCompat.Button.Colored"/>
 
     </LinearLayout>

@@ -23,8 +23,6 @@ public class InventoryDbHelper extends SQLiteOpenHelper{
     public InventoryDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
-        Log.v("Lucero Tag","Create Database");
-
     }
 
     /**

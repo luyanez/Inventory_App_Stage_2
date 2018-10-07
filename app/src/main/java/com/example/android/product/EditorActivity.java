@@ -110,7 +110,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             getLoaderManager().initLoader(EXISTING_PRODUCT_LOADER, null, this);
         }
 
-
         mProductNameEditText = (EditText) findViewById(R.id.edit_product_name);
         mPriceEditText = (EditText) findViewById(R.id.edit_price);
         mQuantityEditText = (EditText) findViewById(R.id.edit_quantity);
@@ -210,7 +209,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
     }
 
-    private void saveProduct(){
+    private boolean saveProduct(){
+
+        boolean allValues = false;
 
         String productNameString = mProductNameEditText.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
@@ -224,12 +225,18 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 TextUtils.isEmpty(quantityString) &&
                 TextUtils.isEmpty(supplierNameString) &&
                 TextUtils.isEmpty(phoneNumberString)) {
-            return;
+            return true;
         }
 
-        if (TextUtils.isEmpty(productNameString)){
-            Toast.makeText(this, getString(R.string.no_name_save),
-                    Toast.LENGTH_SHORT).show();
+
+        if (TextUtils.isEmpty(productNameString) ||
+                TextUtils.isEmpty(priceString) ||
+                TextUtils.isEmpty(quantityString) ||
+                TextUtils.isEmpty(supplierNameString) ||
+                TextUtils.isEmpty(phoneNumberString)){
+            //Toast.makeText(this, getString(R.string.no_name_save),
+            //        Toast.LENGTH_SHORT).show();
+            return false;
         } else {
 
             ContentValues values = new ContentValues();
@@ -289,7 +296,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 }
 
             }
-
+            return true;
         }
 
     }
@@ -331,14 +338,19 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        boolean allSaved = false;
         // User clicked on a menu option in the app bar overflow menu
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
                 // Save Product to Database
-                saveProduct();
-                //Exit activity
-                finish();
+                allSaved = saveProduct();
+
+                if(allSaved)
+                    finish();
+                else
+                    Toast.makeText(this, "You can not leave empty values",
+                            Toast.LENGTH_SHORT).show();
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
